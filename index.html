@@ -357,6 +357,42 @@
     box-shadow: 0 0 12px var(--accent);
   }
 
+  /* ─── CTA dot: il cerchio finale "Lavoriamo insieme", più grande,
+     contornato a zampillo per renderlo riconoscibile e prioritario ─── */
+  #stationDots button.cta-dot{
+    width: 14px; height: 14px;
+    border: 1.5px solid var(--accent);
+    background: transparent;
+    margin-top: 4px;          /* piccolo distacco dal gruppo stations */
+    position: relative;
+    box-shadow: 0 0 0 0 rgba(255,106,61,0.55);
+    animation: ctaPulse 2.6s ease-in-out infinite;
+  }
+  #stationDots button.cta-dot::before{
+    content: '';
+    position: absolute; top: -8px; left: 50%;
+    width: 1px; height: 6px;
+    background: var(--line);
+    transform: translateX(-50%);
+  }
+  #stationDots button.cta-dot:hover{
+    background: rgba(255,106,61,0.18);
+    transform: scale(1.15);
+  }
+  #stationDots button.cta-dot.active{
+    background: var(--accent);
+    transform: scale(1.25);
+    animation: none;
+    box-shadow: 0 0 18px var(--accent), 0 0 0 4px rgba(255,106,61,0.18);
+  }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,106,61,0.45); }
+    50%      { box-shadow: 0 0 0 6px rgba(255,106,61,0.0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    #stationDots button.cta-dot{ animation: none; }
+  }
+
   /* ===== modal (draggable, centered) ===== */
   #modal{
     position: fixed; inset: 0; z-index: 80;
@@ -787,40 +823,59 @@
   #endCard .panel{
     background: var(--panel-strong);
     backdrop-filter: blur(var(--panel-blur));
+    -webkit-backdrop-filter: blur(var(--panel-blur));
     border:1px solid var(--line);
-    padding: 36px 44px;
+    padding: 40px 48px 36px;
     border-radius: 8px;
-    text-align:center;
-    max-width: 560px;
+    text-align: center;
+    max-width: 640px;
+    width: min(640px, calc(100vw - 48px));
+    box-shadow: 0 18px 60px rgba(0,0,0,0.55), 0 2px 12px rgba(0,0,0,0.3);
   }
   #endCard h2{
     font-family: 'Instrument Serif', serif;
     font-style: italic;
     font-weight: 400;
     font-size: clamp(34px, 5vw, 56px);
-    margin: 0 0 8px;
+    margin: 0 0 10px;
     letter-spacing: -0.01em;
+    line-height: 1.0;
   }
   #endCard p{
     font-size: 14px;
     color: var(--ink-soft);
-    margin: 0 0 20px;
+    margin: 0 auto 24px;
+    max-width: 460px;
+    line-height: 1.55;
+  }
+  #endCard .links{
+    display: flex; flex-wrap: wrap;
+    justify-content: center; align-items: center;
+    gap: 10px;
+    margin: 0 auto;
   }
   #endCard a{
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--accent);
     text-decoration: none;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     border: 1px solid var(--accent);
-    padding: 10px 18px;
+    padding: 11px 18px;
     border-radius: 3px;
-    display:inline-block;
-    margin: 0 4px 8px;
-    transition: background .2s, color .2s;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin: 0;
+    min-height: 40px;
+    transition: background .2s, color .2s, transform .2s;
   }
-  #endCard a:hover{ background: var(--accent); color: var(--bg); }
+  #endCard a:hover{ background: var(--accent); color: var(--bg); transform: translateY(-1px); }
+  #endCard a.restart{
+    color: var(--ink-soft);
+    border-color: var(--line);
+    margin-top: 4px;
+  }
+  #endCard a.restart:hover{ background: var(--ink); color: var(--bg); border-color: var(--ink); transform: translateY(-1px); }
 
   /* ===== mobile responsive ===== */
   @media (max-width: 760px){
@@ -947,11 +1002,13 @@
     <div class="meta" style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.28em; text-transform:uppercase; color:var(--accent); margin-bottom:10px;">END OF SIGNAL</div>
     <h2 data-i18n="endTitle">Lavoriamo insieme</h2>
     <p data-i18n="endText">Disponibile per installazioni, videoclip, montaggio, compositing e collaborazioni AI.</p>
-    <a href="mailto:ivanlanzoni1@gmail.com">ivanlanzoni1@gmail.com</a>
-    <a href="https://www.instagram.com/ivan.escente/" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://www.linkedin.com/in/ivanlanzoni1/" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="tel:+393396383335">+39 339 6383335</a>
-    <a href="#" id="restartBtn">↻ Restart</a>
+    <div class="links">
+      <a href="mailto:ivanlanzoni1@gmail.com">ivanlanzoni1@gmail.com</a>
+      <a href="tel:+393396383335">+39 339 6383335</a>
+      <a href="https://www.instagram.com/ivan.escente/" target="_blank" rel="noopener">Instagram ↗</a>
+      <a href="https://www.linkedin.com/in/ivanlanzoni1/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href="#" id="restartBtn" class="restart">↻ Restart</a>
+    </div>
   </div>
 </div>
 
@@ -1138,7 +1195,12 @@ window.CONTENT = {
         en: "Teaching assistant for the Multimedia Design course themed on 'Marco Polo' at the Luchino Visconti Film School in Milan. I support students in producing video and installation content: from writing the concept to editing, up to staging the content on non-standard projection surfaces. A laboratory where cinema, media art and storytelling intertwine."
       },
       link:  "#",
-      media: { type: "placeholder", label: "Materiale in arrivo", cover: "assets/covers/marco-polo.jpg" }
+      media: {
+        type: "image",
+        src: "assets/covers/marco-polo.jpg",
+        cover: "assets/covers/marco-polo.jpg",
+        alt: { it: "Marco Polo · Le città invisibili — Scuola Cinema Visconti", en: "Marco Polo · Invisible Cities — Visconti Film School" }
+      }
     },
 
     /* 04 — Viminale · Museo Fermi */
@@ -1204,9 +1266,13 @@ window.CONTENT = {
       },
       link:  "https://palazzomaffeiverona.com/evento/aeterna-mente-palazzo-maffei-nuova-video-installazione-di-palazzo-maffei/",
       media: {
-        type: "video",
-        src: "assets/media/palazzo-maffei.mp4",
-        cover: "assets/covers/palazzo-maffei.jpg"
+        type: "carousel",
+        images: [
+          "assets/covers/aeterna-mente.jpg",     // collage paintings + silhouette (pag1)
+          "assets/covers/aeterna-mente-02.jpg",  // installazione frame con specchi
+          "assets/covers/aeterna-mente-03.jpg"   // diagramma proiezione
+        ],
+        alt: { it: "Aeterna Mente — Palazzo Maffei", en: "Aeterna Mente — Palazzo Maffei" }
       }
     },
 
@@ -1227,11 +1293,10 @@ window.CONTENT = {
       },
       link:  "https://vimeo.com/1158224962/0431b2b673?fl=pl&fe=sh",
       media: {
-        type: "carousel",
-        images: [
-          "assets/covers/existence.jpg",
-          "assets/covers/existence-02.jpg"
-        ],
+        type: "image",
+        src: "assets/covers/existence.jpg",
+        cover: "assets/covers/existence.jpg",
+        fit: "contain",          // poster verticale, niente crop
         alt: { it: "Existence Without Purpose — Animastudio", en: "Existence Without Purpose — Animastudio" }
       }
     },
@@ -1257,7 +1322,8 @@ window.CONTENT = {
         images: [
           "assets/covers/mathame.jpg",
           "assets/covers/mathame-02.jpg",
-          "assets/covers/mathame-03.jpg"
+          "assets/covers/mathame-03.jpg",
+          "assets/covers/mathame-04.jpg"     // generative ruins / 0_1
         ],
         alt: { it: "Mathame — Generative Visuals", en: "Mathame — Generative Visuals" }
       }
@@ -1282,11 +1348,11 @@ window.CONTENT = {
       media: {
         type: "carousel",
         images: [
-          "assets/covers/neo.jpg",
+          "assets/covers/neo.jpg",          // poster con WAIFF Official Selection
           "assets/covers/neo-02.jpg",
           "assets/covers/neo-03.jpg"
         ],
-        alt: { it: "NEO — The Prophecy · WAIFF 2026 Finalist", en: "NEO — The Prophecy · WAIFF 2026 Finalist" }
+        alt: { it: "NEO — The Prophecy · WAIFF 2026 Official Selection", en: "NEO — The Prophecy · WAIFF 2026 Official Selection" }
       }
     }
 
@@ -1321,9 +1387,9 @@ const CONFIG = {
   WHEEL_GAIN:       0.0007, // sensibilità wheel
   TOUCH_GAIN:       0.0028, // sensibilità touch swipe
   FOG_DENSITY:      0.028,
-  BLOOM_STRENGTH:   0.85,
-  BLOOM_RADIUS:     0.9,
-  BLOOM_THRESHOLD:  0.18,
+  BLOOM_STRENGTH:   0.62,    // ridotto leggermente da 0.85
+  BLOOM_RADIUS:     0.85,
+  BLOOM_THRESHOLD:  0.22,
   ABER:             0.0028,
   NOISE:            0.05,
   SCAN:             0.10,
@@ -1672,6 +1738,7 @@ const dotsWrap = document.getElementById('stationDots');
 projects.forEach((p, i)=>{
   const b = document.createElement('button');
   b.title = (LANG==='it'?p.title.it:p.title.en);
+  b.dataset.kind = 'station';
   b.addEventListener('click', ()=>{
     scrollTarget = i;
     clampTarget();
@@ -1679,9 +1746,30 @@ projects.forEach((p, i)=>{
   });
   dotsWrap.appendChild(b);
 });
+
+// dot CTA finale "Lavoriamo insieme"
+const ctaDot = document.createElement('button');
+ctaDot.title = (LANG==='it' ? 'Lavoriamo insieme' : 'Let\'s work together');
+ctaDot.dataset.kind = 'cta';
+ctaDot.classList.add('cta-dot');
+ctaDot.setAttribute('aria-label', 'CTA');
+ctaDot.addEventListener('click', ()=>{
+  scrollTarget = TOTAL_DEPTH + 0.5;
+  clampTarget();
+  hideHeroOnScroll();
+});
+dotsWrap.appendChild(ctaDot);
+
 function paintDots(active){
-  dotsWrap.querySelectorAll('button').forEach((b,i)=>{
-    b.classList.toggle('active', i === active);
+  // active può essere indice 0..N-1, -1 (hero), -2 (CTA)
+  dotsWrap.querySelectorAll('button').forEach((b)=>{
+    const kind = b.dataset.kind;
+    if (kind === 'cta'){
+      b.classList.toggle('active', active === -2);
+    } else {
+      const i = Array.from(dotsWrap.querySelectorAll('button[data-kind="station"]')).indexOf(b);
+      b.classList.toggle('active', i === active);
+    }
   });
 }
 document.getElementById('stTot').textContent = String(N_STATIONS).padStart(2,'0');
@@ -1800,6 +1888,7 @@ function openModal(p){
   } else if (m.type === 'image' && m.src){
     const img = document.createElement('img');
     img.alt = altTxt;
+    if (m.fit) img.style.objectFit = m.fit;   // 'contain' per poster verticali
     const sources = [m.src];
     if (m.cover && m.cover !== m.src) sources.push(m.cover);
     const derived = deriveThumbnail(p.link);
@@ -1815,6 +1904,7 @@ function openModal(p){
     if (sources.length){
       const img = document.createElement('img');
       img.alt = altTxt;
+      if (m.fit) img.style.objectFit = m.fit;
       setImgWithFallback(img, sources, ()=> showPlaceholder(p, m));
       mMedia.appendChild(img);
     } else { showPlaceholder(p, m); }
@@ -2102,9 +2192,14 @@ window.addEventListener('mousemove', e=>{
   document.getElementById('cy').textContent = (e.clientY>=0?'+':'') + String(e.clientY).padStart(4,'0');
 });
 
-window.addEventListener('click', ()=>{
-  if (modal.classList.contains('show')) return;  // niente double-open
-  if(isHover && activeStationIdx >= 0){
+window.addEventListener('click', (e)=>{
+  if (modal.classList.contains('show')) return;        // modale già aperto
+  if (aboutModal.classList.contains('show')) return;   // about aperto
+  // ignora click su elementi interattivi (link, button, dot, hud-btn ecc)
+  if (e.target && e.target.closest && e.target.closest(
+    'a, button, .hud-btn, #stationDots, #endCard, #modal, #aboutModal, .skip-link'
+  )) return;
+  if (isHover && activeStationIdx >= 0){
     openModal(projects[activeStationIdx]);
   }
 });
@@ -2215,17 +2310,28 @@ function animate(){
   }
 
   // caption + dots + HUD
-  if(nearest !== activeStationIdx && nearestDist < CONFIG.STATION_SPACING*0.7 && scrollCurrent > -0.02){
+  const inEndZone = scrollCurrent > TOTAL_DEPTH + 0.15;
+  const inHeroZone = scrollCurrent < -0.02;
+
+  if (inHeroZone){
+    cap.classList.remove('show');
+    if (activeStationIdx !== -1){ activeStationIdx = -1; paintDots(-1); }
+  } else if (inEndZone){
+    // siamo sulla CTA: cap via, dot CTA attivo
+    cap.classList.remove('show');
+    if (activeStationIdx !== -2){
+      activeStationIdx = -2;     // -2 = CTA
+      paintDots(-2);
+      document.getElementById('signalTag').textContent = 'CTA';
+      document.getElementById('stIdx').textContent = 'CT';
+    }
+  } else if (nearest !== activeStationIdx && nearestDist < CONFIG.STATION_SPACING*0.7){
     activeStationIdx = nearest;
     refreshCaption();
     paintDots(nearest);
     document.getElementById('stIdx').textContent = String(nearest+1).padStart(2,'0');
     document.getElementById('signalTag').textContent = projects[nearest].id.toUpperCase();
     cap.classList.add('show');
-  } else if(scrollCurrent < -0.02){
-    cap.classList.remove('show');
-    activeStationIdx = -1;
-    paintDots(-1);
   }
 
   // end card
@@ -2260,7 +2366,10 @@ window.addEventListener('resize', onResize);
 // Restart
 document.getElementById('restartBtn').addEventListener('click', e=>{
   e.preventDefault();
+  e.stopPropagation();   // non far bubble al window click (eviterebbe l'auto-open di NEO)
   scrollTarget = -0.05;
+  scrollCurrent = -0.05; // smetti immediatamente di puntare alla CTA
+  activeStationIdx = -1; // forza reset così window click ignora
   document.getElementById('hero').style.opacity = '1';
 });
 
